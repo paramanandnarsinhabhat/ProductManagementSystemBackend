@@ -49,6 +49,11 @@ namespace ProductManagementSystem.Services
         }
 
 
+        public async Task<bool> UpdateProductAsync(Product product)
+        {
+            return await _productRepository.UpdateProductAsync(product);
+        }
+
 
     }
 }
