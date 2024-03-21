@@ -26,5 +26,11 @@ namespace ProductManagementSystem.Services
         {
             return await _productRepository.GetProductByIdAsync(id);
         }
+
+        public async Task<List<Product>> GetProductsByNameAsync(string name)
+        {
+            return await _productRepository.GetProductsByNameAsync(name);
+        }
+
     }
 }
