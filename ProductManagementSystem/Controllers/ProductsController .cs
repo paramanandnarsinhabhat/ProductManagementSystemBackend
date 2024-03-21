@@ -35,5 +35,23 @@ namespace ProductManagementSystem.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
+
+
+        [HttpGet]
+        public async Task<ActionResult<List<Product>>> GetProducts()
+        {
+            try
+            {
+                var products = await _productService.GetAllProductsAsync();
+                return Ok(products);
+            }
+            catch (Exception ex)
+            {
+
+                // Return a generic error response such as 500 Internal Server Error
+                // It's often best practice not to expose detailed error information in production environments
+                return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while retrieving products");
+            }
+        }
     }
 }
