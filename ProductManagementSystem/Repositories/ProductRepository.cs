@@ -24,5 +24,16 @@ namespace ProductManagementSystem.Repositories
         {
             return await _context.Products.ToListAsync();
         }
+
+        public async Task<Product> GetProductByIdAsync(int id)
+        {
+            var product = await _context.Products.FindAsync(id);
+            if (product == null)
+            {
+                // Throw an exception when the product is not found
+                throw new KeyNotFoundException($"Product with ID {id} not found.");
+            }
+            return product;
+        }
     }
 }
