@@ -96,5 +96,18 @@ namespace ProductManagementSystem.Repositories
             return true;
         }
 
+
+        public async Task<bool> DeleteProductAsync(int productId)
+        {
+            var product = await _context.Products.FindAsync(productId);
+            if (product == null)
+            {
+                return false; // Product not found
+            }
+
+            _context.Products.Remove(product);
+            await _context.SaveChangesAsync();
+            return true; // Successful deletion
+        }
     }
 }
