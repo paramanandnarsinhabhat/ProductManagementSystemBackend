@@ -1,6 +1,8 @@
 
 using Microsoft.EntityFrameworkCore;
 using ProductManagementSystem.Data;
+using ProductManagementSystem.Repositories;
+using ProductManagementSystem.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,7 +15,15 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
+builder.Services.AddScoped<ProductService>();
+
+
 var app = builder.Build();
+
+
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
