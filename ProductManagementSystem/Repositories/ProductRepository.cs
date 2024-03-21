@@ -11,9 +11,12 @@ namespace ProductManagementSystem.Repositories
         
         }
 
-        public Task<Product> AddProductAsync(Product product)
+        public async Task<Product> AddProductAsync(Product product)
         {
-            throw new NotImplementedException();
+            _context.Products.Add(product);
+            await _context.SaveChangesAsync();
+            return product;
+
         }
     }
 }
