@@ -17,5 +17,8 @@ namespace ProductManagementSystem.Repositories
         Task<List<Product>> GetProductsByCategoryAsync(string category);
 
         Task<List<Product>> GetSortedProductsAsync(string sortBy, string sortOrder);
+
+        Task<bool> UpdateProductAsync(Product product);
+
     }
 }

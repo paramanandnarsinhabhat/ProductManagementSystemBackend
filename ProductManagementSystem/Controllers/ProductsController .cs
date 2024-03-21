@@ -152,11 +152,14 @@ namespace ProductManagementSystem.Controllers
             catch (Exception ex)
             {
                 // Log the exception and return a generic error response
-                // Example: _logger.LogError(ex, "An error occurred while sorting products.");
+
 
                 return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while processing your request.");
             }
         }
+
+
+
 
     }
 }
