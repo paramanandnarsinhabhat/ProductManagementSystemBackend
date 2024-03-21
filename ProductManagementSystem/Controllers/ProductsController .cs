@@ -53,5 +53,16 @@ namespace ProductManagementSystem.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while retrieving products");
             }
         }
+
+        [HttpGet("{id}")] 
+        public async Task<ActionResult<Product>> GetProduct(int id)
+        {
+            var product = await _productService.GetProductByIdAsync(id);
+            if (product == null)
+            {
+                return NotFound(); // Returns HTTP 404 Not Found if the product does not exist
+            }
+            return Ok(product); // Returns HTTP 200 OK with the product
+        }
     }
 }
