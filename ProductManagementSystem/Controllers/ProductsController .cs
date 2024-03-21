@@ -116,5 +116,25 @@ namespace ProductManagementSystem.Controllers
             }
         }
 
+        [HttpGet("category/{category}")]
+        public async Task<ActionResult<List<Product>>> GetProductsByCategory(string category)
+        {
+            try
+            {
+                var products = await _productService.GetProductsByCategoryAsync(category);
+                if (products == null || !products.Any())
+                {
+                    return NotFound($"No products found in the category '{category}'.");
+                }
+                return Ok(products);
+            }
+            catch (Exception ex)
+            {
+                // Log the exception here using your preferred logging mechanism
+
+                return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while processing your request.");
+            }
+        }
+
     }
 }
