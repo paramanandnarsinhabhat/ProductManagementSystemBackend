@@ -136,7 +136,27 @@ namespace ProductManagementSystem.Controllers
             }
         }
 
+        [HttpGet("sort")]
+        public async Task<ActionResult<List<Product>>> SortProducts([FromQuery] string sortBy = "name", [FromQuery] string sortOrder = "asc")
+        {
+            try
+            {
+                var sortedProducts = await _productService.GetSortedProductsAsync(sortBy, sortOrder);
+                return Ok(sortedProducts);
+            }
+            catch (ArgumentException ex)
+            {
+                // If an invalid "sortBy" argument is passed
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                // Log the exception and return a generic error response
+                // Example: _logger.LogError(ex, "An error occurred while sorting products.");
 
+                return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while processing your request.");
+            }
+        }
 
     }
 }
