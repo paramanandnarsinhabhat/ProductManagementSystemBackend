@@ -15,5 +15,7 @@ namespace ProductManagementSystem.Repositories
         Task<int> GetTotalCountAsync();
 
         Task<List<Product>> GetProductsByCategoryAsync(string category);
+
+        Task<List<Product>> GetSortedProductsAsync(string sortBy, string sortOrder);
     }
 }
