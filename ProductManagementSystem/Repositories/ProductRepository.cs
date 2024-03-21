@@ -42,7 +42,10 @@ namespace ProductManagementSystem.Repositories
                                  .ToListAsync();
         }
 
-
+        public async Task<int> GetTotalCountAsync() 
+        {
+            return await _context.Products.CountAsync();
+        }
 
     }
 }
