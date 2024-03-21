@@ -22,5 +22,7 @@ namespace ProductManagementSystem.Repositories
 
 
         Task<bool> DeleteProductAsync(int productId);
+
+        Task DeleteAllProductsAsync();
     }
 }
