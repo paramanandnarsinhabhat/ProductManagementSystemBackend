@@ -1,4 +1,5 @@
-﻿using ProductManagementSystem.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using ProductManagementSystem.Data;
 using ProductManagementSystem.Models;
 
 namespace ProductManagementSystem.Repositories
@@ -17,6 +18,11 @@ namespace ProductManagementSystem.Repositories
             await _context.SaveChangesAsync();
             return product;
 
+        }
+
+        public async Task<List<Product>> GetAllProductsAsync()
+        {
+            return await _context.Products.ToListAsync();
         }
     }
 }
