@@ -54,6 +54,10 @@ namespace ProductManagementSystem.Services
             return await _productRepository.UpdateProductAsync(product);
         }
 
+        public async Task<bool> DeleteProductAsync(int productId)
+        {
+            return await _productRepository.DeleteProductAsync(productId);
+        }
 
     }
 }
