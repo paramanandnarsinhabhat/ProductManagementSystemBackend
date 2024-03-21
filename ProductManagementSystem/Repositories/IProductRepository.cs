@@ -10,6 +10,7 @@ namespace ProductManagementSystem.Repositories
 
         Task<Product> GetProductByIdAsync(int id);
 
+        Task<List<Product>> GetProductsByNameAsync(string name);
 
     }
 }
