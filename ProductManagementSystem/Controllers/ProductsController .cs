@@ -54,18 +54,52 @@ namespace ProductManagementSystem.Controllers
             }
         }
 
-        [HttpGet("{id}")] 
+        [HttpGet("{id}")]
         public async Task<ActionResult<Product>> GetProduct(int id)
         {
-            var product = await _productService.GetProductByIdAsync(id);
-            if (product == null)
+            try
             {
-                return NotFound(); // Returns HTTP 404 Not Found if the product does not exist
+                var product = await _productService.GetProductByIdAsync(id);
+                if (product == null)
+                {
+                    return NotFound(); 
+                }
+                return Ok(product); 
             }
-            return Ok(product); // Returns HTTP 200 OK with the product
+            catch (Exception ex)
+            {
+                // Log the exception details here using your preferred logging approach
+                // It's often best practice not to expose detailed exception information in production environments
+                return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while retrieving the product");
+            }
         }
 
 
+
+        [HttpGet("search")]
+        public async Task<ActionResult<List<Product>>> SearchProducts(string name)
+        {
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                return BadRequest("Name parameter is required");
+            }
+
+            try
+            {
+                var products = await _productService.GetProductsByNameAsync(name);
+                if (products == null || !products.Any())
+                {
+                    return NotFound($"No products found with the name '{name}'");
+                }
+                return Ok(products);
+            }
+            catch (Exception ex)
+            {
+                // Log the exception here using your preferred logging mechanism.
+
+                return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while processing your request.");
+            }
+        }
 
     }
 }
