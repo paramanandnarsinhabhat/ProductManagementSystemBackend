@@ -34,5 +34,13 @@ namespace ProductManagementSystem.Repositories
             }
             return product;
         }
+
+        public async Task<List<Product>> GetProductsByNameAsync(string name)
+        {
+            return await _context.Products
+                                 .Where(p => p.Name.Contains(name))
+                                 .ToListAsync();
+        }
+
     }
 }
