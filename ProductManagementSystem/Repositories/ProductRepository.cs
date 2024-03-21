@@ -47,5 +47,13 @@ namespace ProductManagementSystem.Repositories
             return await _context.Products.CountAsync();
         }
 
+        public async Task<List<Product>> GetProductsByCategoryAsync(string category)
+        {
+            return await _context.Products
+                                 .Where(p => p.Category.Equals(category, StringComparison.OrdinalIgnoreCase))
+                                 .ToListAsync();
+        }
+
+
     }
 }
