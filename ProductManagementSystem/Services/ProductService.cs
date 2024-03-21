@@ -32,5 +32,11 @@ namespace ProductManagementSystem.Services
             return await _productRepository.GetProductsByNameAsync(name);
         }
 
+
+        public async Task<int> GetTotalCountAsync() 
+        {
+            return await _productRepository.GetTotalCountAsync();
+        }
+
     }
 }
