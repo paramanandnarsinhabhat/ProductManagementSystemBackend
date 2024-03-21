@@ -158,6 +158,35 @@ namespace ProductManagementSystem.Controllers
             }
         }
 
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateProduct(int id, [FromBody] Product product)
+        {
+            if (id != product.Id)
+            {
+                return BadRequest("Product ID mismatch");
+            }
+
+            try
+            {
+                var updateSuccess = await _productService.UpdateProductAsync(product);
+                if (!updateSuccess)
+                {
+                    return NotFound($"Product with ID {id} not found.");
+                }
+
+                return NoContent(); // 204 No Content
+            }
+            catch (Exception ex)
+            {
+                // Log the exception details here using your preferred logging approach.
+                 // Return a generic error response such as 500 Internal Server Error.
+                // best practice not to expose detailed error information in production environments.
+                return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while processing your request.");
+            }
+        }
+
+
+
 
 
 
