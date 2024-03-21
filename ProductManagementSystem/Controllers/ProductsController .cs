@@ -206,7 +206,22 @@ namespace ProductManagementSystem.Controllers
             }
         }
 
+        [HttpDelete]
+        public async Task<IActionResult> DeleteAllProducts()
+        {
+            try
+            {
+                await _productService.DeleteAllProductsAsync();
+                return NoContent(); // 204 No Content
+            }
+            catch (Exception ex)
+            {
+                // Log the exception here using your preferred logging mechanism
+                // Example: _logger.LogError(ex, "An error occurred while deleting all products.");
 
+                return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while processing your request.");
+            }
+        }
 
 
 
