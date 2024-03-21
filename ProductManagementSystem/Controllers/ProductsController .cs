@@ -101,5 +101,20 @@ namespace ProductManagementSystem.Controllers
             }
         }
 
+        [HttpGet("total-count")]
+        public async Task<ActionResult<int>> GetTotalCount()
+        {
+            try
+            {
+                var totalCount = await _productService.GetTotalCountAsync();
+                return Ok(totalCount); // Returns HTTP 200 OK with the total count
+            }
+            catch (Exception ex)
+            {
+                // Log the exception here using your preferred logging mechanism
+               return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while processing your request.");
+            }
+        }
+
     }
 }
