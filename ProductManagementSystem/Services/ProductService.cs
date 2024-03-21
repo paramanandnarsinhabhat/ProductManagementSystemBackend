@@ -38,5 +38,12 @@ namespace ProductManagementSystem.Services
             return await _productRepository.GetTotalCountAsync();
         }
 
+        public async Task<List<Product>> GetProductsByCategoryAsync(string category)
+        {
+            return await _productRepository.GetProductsByCategoryAsync(category);
+        }
+
+
+
     }
 }
