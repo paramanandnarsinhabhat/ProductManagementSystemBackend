@@ -55,5 +55,27 @@ namespace ProductManagementSystem.Repositories
         }
 
 
+        public async Task<List<Product>> GetSortedProductsAsync(string sortBy, string sortOrder)
+        {
+            IQueryable<Product> query = _context.Products;
+
+            switch (sortBy.ToLower())
+            {
+                case "name":
+                    query = sortOrder.ToLower() == "asc" ? query.OrderBy(p => p.Name) : query.OrderByDescending(p => p.Name);
+                    break;
+                case "category":
+                    query = sortOrder.ToLower() == "asc" ? query.OrderBy(p => p.Category) : query.OrderByDescending(p => p.Category);
+                    break;
+                case "price":
+                    query = sortOrder.ToLower() == "asc" ? query.OrderBy(p => p.Price) : query.OrderByDescending(p => p.Price);
+                    break;
+                default:
+                    throw new ArgumentException("Invalid sort by value");
+            }
+
+            return await query.ToListAsync();
+        }
+
     }
 }
