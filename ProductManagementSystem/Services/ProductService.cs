@@ -43,7 +43,10 @@ namespace ProductManagementSystem.Services
             return await _productRepository.GetProductsByCategoryAsync(category);
         }
 
-
+        public async Task<List<Product>> GetSortedProductsAsync(string sortBy, string sortOrder)
+        {
+            return await _productRepository.GetSortedProductsAsync(sortBy, sortOrder);
+        }
 
 
 
