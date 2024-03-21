@@ -77,5 +77,24 @@ namespace ProductManagementSystem.Repositories
             return await query.ToListAsync();
         }
 
+
+        public async Task<bool> UpdateProductAsync(Product product)
+        {
+            var existingProduct = await _context.Products.FindAsync(product.Id);
+            if (existingProduct == null)
+            {
+                return false;
+            }
+
+            // Update properties
+            existingProduct.Name = product.Name;
+            existingProduct.Description = product.Description;
+            existingProduct.Category = product.Category;
+            existingProduct.Price = product.Price;
+
+            await _context.SaveChangesAsync();
+            return true;
+        }
+
     }
 }
