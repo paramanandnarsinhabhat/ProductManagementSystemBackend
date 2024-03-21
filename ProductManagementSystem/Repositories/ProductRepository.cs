@@ -109,5 +109,14 @@ namespace ProductManagementSystem.Repositories
             await _context.SaveChangesAsync();
             return true; // Successful deletion
         }
+
+
+        public async Task DeleteAllProductsAsync()
+        {
+            var allProducts = await _context.Products.ToListAsync();
+            _context.Products.RemoveRange(allProducts);
+            await _context.SaveChangesAsync();
+        }
+
     }
 }
