@@ -315,6 +315,21 @@ namespace TestProject1
             Assert.Equal($"Invalid sort by value: {invalidSortBy}", badRequestResult.Value);
         }
 
+        [Fact]
+        public async Task SortProducts_ReturnsInternalServerError_OnException()
+        {
+            // Arrange
+            _mockService.Setup(service => service.GetSortedProductsAsync(It.IsAny<string>(), It.IsAny<string>()))
+                        .ThrowsAsync(new Exception("Test exception"));
+
+            // Act
+            var result = await _controller.SortProducts("name", "asc");
+
+            // Assert
+            var statusCodeResult = Assert.IsType<ObjectResult>(result.Result);
+            Assert.Equal(StatusCodes.Status500InternalServerError, statusCodeResult.StatusCode);
+            Assert.Equal("An error occurred while processing your request.", statusCodeResult.Value);
+        }
 
 
 
