@@ -344,6 +344,20 @@ namespace TestProject1
             Assert.IsType<BadRequestObjectResult>(result);
         }
 
+        [Fact]
+        public async Task UpdateProduct_ReturnsNotFound_WhenProductNotFound()
+        {
+            // Arrange
+            var product = new Product { Id = 1, Name = "Test Product" };
+            _mockService.Setup(s => s.UpdateProductAsync(product)).ReturnsAsync(false);
+
+            // Act
+            var result = await _controller.UpdateProduct(1, product);
+
+            // Assert
+            Assert.IsType<NotFoundObjectResult>(result);
+        }
+
 
     }
 
