@@ -1,9 +1,10 @@
-﻿using ProductManagementSystem.Models;
+﻿using ProductManagementSystem.Interfaces;
+using ProductManagementSystem.Models;
 using ProductManagementSystem.Repositories;
 
 namespace ProductManagementSystem.Services
 {
-    public class ProductService
+    public class ProductService : IProductService
     {
         private readonly IProductRepository _productRepository;
 

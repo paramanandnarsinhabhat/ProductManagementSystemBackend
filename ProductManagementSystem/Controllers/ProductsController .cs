@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using ProductManagementSystem.Interfaces;
 using ProductManagementSystem.Models;
 using ProductManagementSystem.Services;
 
@@ -8,9 +9,9 @@ namespace ProductManagementSystem.Controllers
     [ApiController]
     public class ProductsController : Controller
     {
-        private readonly ProductService _productService;
+        private readonly IProductService _productService;
 
-        public ProductsController(ProductService productService)
+        public ProductsController(IProductService productService)
         {
             _productService = productService;
         }
