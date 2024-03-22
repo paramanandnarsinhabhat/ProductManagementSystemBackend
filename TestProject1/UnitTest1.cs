@@ -198,6 +198,22 @@ namespace TestProject1
             Assert.Equal(StatusCodes.Status500InternalServerError, statusCodeResult.StatusCode);
         }
 
+        [Fact]
+        public async Task GetTotalCount_ReturnsOk_WithTotalCount()
+        {
+            // Arrange
+            var totalCount = 5;
+            _mockService.Setup(s => s.GetTotalCountAsync()).ReturnsAsync(totalCount);
+
+            // Act
+            var result = await _controller.GetTotalCount();
+
+            // Assert
+            var okResult = Assert.IsType<OkObjectResult>(result.Result);
+            Assert.Equal(totalCount, okResult.Value);
+        }
+
+
 
     }
 
