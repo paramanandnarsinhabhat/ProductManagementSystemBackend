@@ -278,6 +278,28 @@ namespace TestProject1
         }
 
 
+        [Fact]
+        public async Task SortProducts_ReturnsOk_WithSortedProducts()
+        {
+            // Arrange: Ensure this list matches the expected order in your assertions.
+            var mockProducts = new List<Product>
+    {
+        new Product { Id = 2, Name = "A Product", Category = "Electronics", Price = 150 },
+        new Product { Id = 1, Name = "B Product", Category = "Electronics", Price = 200 }
+    };
+            _mockService.Setup(service => service.GetSortedProductsAsync("name", "asc")).ReturnsAsync(mockProducts);
+
+            // Act
+            var result = await _controller.SortProducts("name", "asc");
+
+            // Assert: Ensure the assertion matches the setup.
+            var okResult = Assert.IsType<OkObjectResult>(result.Result);
+            var products = Assert.IsType<List<Product>>(okResult.Value);
+            Assert.Equal(2, products.Count);
+            Assert.Equal("A Product", products.First().Name); // This should now pass.
+        }
+
+
 
     }
 
