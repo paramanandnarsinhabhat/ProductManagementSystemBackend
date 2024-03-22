@@ -248,6 +248,19 @@ namespace TestProject1
             Assert.Equal(2, products.Count);
         }
 
+        [Fact]
+        public async Task GetProductsByCategory_ReturnsNotFound_WhenNoProductsFound()
+        {
+            // Arrange
+            _mockService.Setup(service => service.GetProductsByCategoryAsync("Nonexistent")).ReturnsAsync(new List<Product>());
+
+            // Act
+            var result = await _controller.GetProductsByCategory("Nonexistent");
+
+            // Assert
+            var notFoundResult = Assert.IsType<NotFoundObjectResult>(result.Result);
+            Assert.Equal("No products found in the category 'Nonexistent'.", notFoundResult.Value);
+        }
 
 
 
