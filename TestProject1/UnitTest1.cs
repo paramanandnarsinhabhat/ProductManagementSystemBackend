@@ -331,6 +331,18 @@ namespace TestProject1
             Assert.Equal("An error occurred while processing your request.", statusCodeResult.Value);
         }
 
+        [Fact]
+        public async Task UpdateProduct_ReturnsBadRequest_WhenIdMismatch()
+        {
+            // Arrange
+            var product = new Product { Id = 1, Name = "Test Product" };
+
+            // Act
+            var result = await _controller.UpdateProduct(2, product); // Different ID 
+
+            // Assert
+            Assert.IsType<BadRequestObjectResult>(result);
+        }
 
 
     }
