@@ -299,6 +299,23 @@ namespace TestProject1
             Assert.Equal("A Product", products.First().Name); // This should now pass.
         }
 
+        [Fact]
+        public async Task SortProducts_ReturnsBadRequest_ForInvalidSortBy()
+        {
+            // Arrange
+            var invalidSortBy = "invalid";
+            _mockService.Setup(service => service.GetSortedProductsAsync(invalidSortBy, It.IsAny<string>()))
+                        .Throws(new ArgumentException($"Invalid sort by value: {invalidSortBy}"));
+
+            // Act
+            var result = await _controller.SortProducts(invalidSortBy, "asc");
+
+            // Assert
+            var badRequestResult = Assert.IsType<BadRequestObjectResult>(result.Result);
+            Assert.Equal($"Invalid sort by value: {invalidSortBy}", badRequestResult.Value);
+        }
+
+
 
 
     }
