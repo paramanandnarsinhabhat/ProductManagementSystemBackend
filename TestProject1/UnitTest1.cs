@@ -434,6 +434,37 @@ namespace TestProject1
         }
 
 
+
+        [Fact]
+        public async Task DeleteAllProducts_ReturnsNoContent_WhenProductsDeletedSuccessfully()
+        {
+            // Arrange
+            _mockService.Setup(s => s.DeleteAllProductsAsync()).Returns(Task.CompletedTask);
+
+            // Act
+            var result = await _controller.DeleteAllProducts();
+
+            // Assert
+            Assert.IsType<NoContentResult>(result);
+        }
+
+
+        [Fact]
+        public async Task DeleteAllProducts_ReturnsInternalServerError_OnException()
+        {
+            // Arrange
+            _mockService.Setup(s => s.DeleteAllProductsAsync()).ThrowsAsync(new Exception("Test exception"));
+
+            // Act
+            var result = await _controller.DeleteAllProducts();
+
+            // Assert
+            var objectResult = Assert.IsType<ObjectResult>(result);
+            Assert.Equal(StatusCodes.Status500InternalServerError, objectResult.StatusCode);
+            Assert.Equal("An error occurred while processing your request.", objectResult.Value);
+        }
+
+
     }
 
 
