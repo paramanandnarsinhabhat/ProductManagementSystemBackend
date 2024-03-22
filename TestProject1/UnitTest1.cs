@@ -372,6 +372,20 @@ namespace TestProject1
             Assert.IsType<NoContentResult>(result);
         }
 
+        [Fact]
+        public async Task UpdateProduct_ReturnsInternalServerError_OnException()
+        {
+            // Arrange
+            var product = new Product { Id = 1, Name = "Test Product" };
+            _mockService.Setup(s => s.UpdateProductAsync(It.IsAny<Product>())).ThrowsAsync(new Exception());
+
+            // Act
+            var result = await _controller.UpdateProduct(1, product);
+
+            // Assert
+            var objectResult = Assert.IsType<ObjectResult>(result);
+            Assert.Equal(StatusCodes.Status500InternalServerError, objectResult.StatusCode);
+        }
 
 
 
