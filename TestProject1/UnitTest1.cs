@@ -213,6 +213,42 @@ namespace TestProject1
             Assert.Equal(totalCount, okResult.Value);
         }
 
+        [Fact]
+        public async Task GetTotalCount_ReturnsInternalServerError_OnException()
+        {
+            // Arrange
+            _mockService.Setup(s => s.GetTotalCountAsync()).ThrowsAsync(new Exception("Test exception"));
+
+            // Act
+            var result = await _controller.GetTotalCount();
+
+            // Assert
+            var statusCodeResult = Assert.IsType<ObjectResult>(result.Result);
+            Assert.Equal(StatusCodes.Status500InternalServerError, statusCodeResult.StatusCode);
+            Assert.Equal("An error occurred while processing your request.", statusCodeResult.Value);
+        }
+
+        [Fact]
+        public async Task GetProductsByCategory_ReturnsOk_WithProducts()
+        {
+            // Arrange
+            var mockProducts = new List<Product>
+    {
+        new Product { Id = 1, Name = "Product A", Category = "Electronics", Price = 200 },
+        new Product { Id = 2, Name = "Product B", Category = "Electronics", Price = 150 }
+    };
+            _mockService.Setup(service => service.GetProductsByCategoryAsync("Electronics")).ReturnsAsync(mockProducts);
+
+            // Act
+            var result = await _controller.GetProductsByCategory("Electronics");
+
+            // Assert
+            var okResult = Assert.IsType<OkObjectResult>(result.Result);
+            var products = Assert.IsType<List<Product>>(okResult.Value);
+            Assert.Equal(2, products.Count);
+        }
+
+
 
 
     }
