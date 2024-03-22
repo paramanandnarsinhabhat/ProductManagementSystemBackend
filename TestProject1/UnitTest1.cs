@@ -262,6 +262,21 @@ namespace TestProject1
             Assert.Equal("No products found in the category 'Nonexistent'.", notFoundResult.Value);
         }
 
+        [Fact]
+        public async Task GetProductsByCategory_ReturnsInternalServerError_OnException()
+        {
+            // Arrange
+            _mockService.Setup(service => service.GetProductsByCategoryAsync(It.IsAny<string>())).ThrowsAsync(new Exception("Test exception"));
+
+            // Act
+            var result = await _controller.GetProductsByCategory("ErrorCategory");
+
+            // Assert
+            var statusCodeResult = Assert.IsType<ObjectResult>(result.Result);
+            Assert.Equal(StatusCodes.Status500InternalServerError, statusCodeResult.StatusCode);
+            Assert.Equal("An error occurred while processing your request.", statusCodeResult.Value);
+        }
+
 
 
     }
