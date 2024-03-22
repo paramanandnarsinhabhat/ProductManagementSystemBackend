@@ -387,9 +387,51 @@ namespace TestProject1
             Assert.Equal(StatusCodes.Status500InternalServerError, objectResult.StatusCode);
         }
 
+        [Fact]
+        public async Task DeleteProduct_ReturnsNoContent_WhenProductDeletedSuccessfully()
+        {
+            // Arrange
+            var productId = 1;
+            _mockService.Setup(s => s.DeleteProductAsync(productId)).ReturnsAsync(true);
+
+            // Act
+            var result = await _controller.DeleteProduct(productId);
+
+            // Assert
+            Assert.IsType<NoContentResult>(result);
+        }
 
 
+        [Fact]
+        public async Task DeleteProduct_ReturnsNotFound_WhenProductDoesNotExist()
+        {
+            // Arrange
+            var productId = 999; // Assuming this ID does not exist
+            _mockService.Setup(s => s.DeleteProductAsync(productId)).ReturnsAsync(false);
 
+            // Act
+            var result = await _controller.DeleteProduct(productId);
+
+            // Assert
+            var notFoundResult = Assert.IsType<NotFoundObjectResult>(result);
+            Assert.Equal($"Product with ID {productId} not found.", notFoundResult.Value);
+        }
+
+        [Fact]
+        public async Task DeleteProduct_ReturnsInternalServerError_OnException()
+        {
+            // Arrange
+            var productId = 1;
+            _mockService.Setup(s => s.DeleteProductAsync(productId)).ThrowsAsync(new Exception("Test exception"));
+
+            // Act
+            var result = await _controller.DeleteProduct(productId);
+
+            // Assert
+            var objectResult = Assert.IsType<ObjectResult>(result);
+            Assert.Equal(StatusCodes.Status500InternalServerError, objectResult.StatusCode);
+            Assert.Equal("An error occurred while processing your request.", objectResult.Value);
+        }
 
 
     }
