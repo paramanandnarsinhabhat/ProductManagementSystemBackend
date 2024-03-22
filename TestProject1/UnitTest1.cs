@@ -7,6 +7,7 @@ namespace TestProject1
     using ProductManagementSystem.Interfaces; // Adjust namespaces as needed
     using Microsoft.AspNetCore.Mvc;
     using System.Threading.Tasks;
+    using Microsoft.AspNetCore.Http;
 
     public class ProductsControllerTests
     {
@@ -81,6 +82,48 @@ namespace TestProject1
 
             // Optionally verify that the service method was called
             mockService.Verify(s => s.GetProductByIdAsync(validProductId), Times.Once);
+        }
+
+
+        [Fact]
+        public async Task GetProducts_ReturnsAllProducts()
+        {
+            // Arrange
+            var products = new List<Product>
+        {
+            new Product { Id = 1, Name = "Product 1" },
+            new Product { Id = 2, Name = "Product 2" }
+        };
+            _mockService.Setup(s => s.GetAllProductsAsync()).ReturnsAsync(products);
+
+            // Act
+            var result = await _controller.GetProducts();
+
+            // Assert
+            var okResult = Assert.IsType<OkObjectResult>(result.Result);
+            var returnedProducts = Assert.IsType<List<Product>>(okResult.Value);
+            Assert.Equal(2, returnedProducts.Count);
+            Assert.Equal(products, returnedProducts);
+
+            _mockService.Verify(s => s.GetAllProductsAsync(), Times.Once);
+        }
+
+
+        [Fact]
+        public async Task GetProducts_ReturnsInternalServerError_OnException()
+        {
+            // Arrange
+            _mockService.Setup(s => s.GetAllProductsAsync()).ThrowsAsync(new System.Exception("Test exception"));
+
+            // Act
+            var result = await _controller.GetProducts();
+
+            // Assert
+            var statusCodeResult = Assert.IsType<ObjectResult>(result.Result);
+            Assert.Equal(StatusCodes.Status500InternalServerError, statusCodeResult.StatusCode);
+            Assert.Equal("An error occurred while retrieving products", statusCodeResult.Value);
+
+            _mockService.Verify(s => s.GetAllProductsAsync(), Times.Once);
         }
 
 
