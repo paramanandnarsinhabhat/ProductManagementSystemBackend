@@ -36,6 +36,21 @@ namespace TestProject1
             Assert.Equal(product.Id, returnValue.Id);
         }
 
+        [Fact]
+        public async Task PostProduct_ReturnsInternalServerError_OnException()
+        {
+            // Arrange
+            var product = new Product { Name = "Error Product", Description = "Error Description", Category = "Error", Price = 0M };
+            _mockService.Setup(s => s.AddProductAsync(It.IsAny<Product>())).ThrowsAsync(new Exception("Test exception"));
+
+            // Act
+            var result = await _controller.PostProduct(product);
+
+            // Assert
+            var statusCodeResult = Assert.IsType<ObjectResult>(result.Result);
+            Assert.Equal(500, statusCodeResult.StatusCode);
+            Assert.Equal("Test exception", statusCodeResult.Value);
+        }
 
         [Fact]
         public async Task GetProduct_ReturnsNotFound_ForInvalidProductId()
@@ -62,7 +77,7 @@ namespace TestProject1
                 Name = "Test Product",
                 Description = "Test Description",
                 Category = "Test Category",
-                Price = 100M
+                Price = 10M
             };
 
             mockService.Setup(s => s.GetProductByIdAsync(validProductId)).ReturnsAsync(expectedProduct);
@@ -124,6 +139,49 @@ namespace TestProject1
             Assert.Equal("An error occurred while retrieving products", statusCodeResult.Value);
 
             _mockService.Verify(s => s.GetAllProductsAsync(), Times.Once);
+        }
+
+
+        [Theory]
+        [InlineData("")]
+        [InlineData(null)]
+        public async Task SearchProducts_ReturnsBadRequest_ForMissingOrEmptyName(string name)
+        {
+            // Act
+            var result = await _controller.SearchProducts(name);
+
+            // Assert
+            Assert.IsType<BadRequestObjectResult>(result.Result);
+        }
+
+        [Fact]
+        public async Task SearchProducts_ReturnsNotFound_WhenNoProductsFound()
+        {
+            // Arrange
+            _mockService.Setup(s => s.GetProductsByNameAsync(It.IsAny<string>())).ReturnsAsync(new List<Product>());
+
+            // Act
+            var result = await _controller.SearchProducts("NonExistingProduct");
+
+            // Assert
+            Assert.IsType<NotFoundObjectResult>(result.Result);
+        }
+
+
+        [Fact]
+        public async Task SearchProducts_ReturnsOk_WithProducts()
+        {
+            // Arrange
+            var products = new List<Product> { new Product { Name = "Test Product" } };
+            _mockService.Setup(s => s.GetProductsByNameAsync("Test")).ReturnsAsync(products);
+
+            // Act
+            var result = await _controller.SearchProducts("Test");
+
+            // Assert
+            var okResult = Assert.IsType<OkObjectResult>(result.Result);
+            var returnedProducts = Assert.IsType<List<Product>>(okResult.Value);
+            Assert.Single(returnedProducts);
         }
 
 
