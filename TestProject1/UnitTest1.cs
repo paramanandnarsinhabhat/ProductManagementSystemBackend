@@ -184,6 +184,19 @@ namespace TestProject1
             Assert.Single(returnedProducts);
         }
 
+        [Fact]
+        public async Task SearchProducts_ReturnsInternalServerError_OnException()
+        {
+            // Arrange
+            _mockService.Setup(s => s.GetProductsByNameAsync(It.IsAny<string>())).ThrowsAsync(new Exception());
+
+            // Act
+            var result = await _controller.SearchProducts("Error");
+
+            // Assert
+            var statusCodeResult = Assert.IsType<ObjectResult>(result.Result);
+            Assert.Equal(StatusCodes.Status500InternalServerError, statusCodeResult.StatusCode);
+        }
 
 
     }
