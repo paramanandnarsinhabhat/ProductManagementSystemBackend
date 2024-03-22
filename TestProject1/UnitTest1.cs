@@ -358,6 +358,25 @@ namespace TestProject1
             Assert.IsType<NotFoundObjectResult>(result);
         }
 
+        [Fact]
+        public async Task UpdateProduct_ReturnsNoContent_WhenSuccessful()
+        {
+            // Arrange
+            var product = new Product { Id = 1, Name = "Test Product" };
+            _mockService.Setup(s => s.UpdateProductAsync(product)).ReturnsAsync(true);
+
+            // Act
+            var result = await _controller.UpdateProduct(1, product);
+
+            // Assert
+            Assert.IsType<NoContentResult>(result);
+        }
+
+
+
+
+
+
 
     }
 
